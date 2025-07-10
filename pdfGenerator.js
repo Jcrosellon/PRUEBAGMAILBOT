@@ -24,7 +24,7 @@ async function crearPDFConsolidado(asesor, datosClientes) {
     doc.pipe(stream);
 
     // Portada
-    doc.fontSize(22).fillColor('#000000').text('Reporte de Facturación', { align: 'center' });
+    doc.fontSize(23).fillColor('#000000').text('REPORTE FACTURAS DE VENTA SIN RECIBIDO', { align: 'center' });
     doc.moveDown(1.5);
     doc.fontSize(16).fillColor('#000000').text(`Asesor: ${asesor}`, { align: 'left' });
     doc.fontSize(12).fillColor('#000000').text(`Fecha de generación: ${new Date().toLocaleDateString()}`, { align: 'left' });
@@ -33,7 +33,7 @@ async function crearPDFConsolidado(asesor, datosClientes) {
     // Configuración de tabla
     const startX = 20;
     let currentY = doc.y;
-    const rowHeight = 20;
+    const rowHeight = 25;
     const headerHeight = 30;
 
     const columns = [
@@ -49,7 +49,7 @@ async function crearPDFConsolidado(asesor, datosClientes) {
     // Dibujar encabezado azul
     let x = startX;
     doc.rect(startX, currentY, columns.reduce((acc, col) => acc + col.width, 0), headerHeight)
-       .fill('#007ACC');
+       .fill('#eac04a');
 
     doc.font('Helvetica-Bold').fillColor('#FFFFFF').fontSize(11);
     columns.forEach(col => {

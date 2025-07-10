@@ -24,8 +24,8 @@ function limpiarEncabezados(datos) {
 function obtenerDatosClientes(ruta) {
     const workbook = xlsx.readFile(ruta);
 
-    let datosGenerales = xlsx.utils.sheet_to_json(workbook.Sheets['DatosGenerales'], { raw: true });
-    let datosAsesor = xlsx.utils.sheet_to_json(workbook.Sheets['DatosAsesor'], { raw: true });
+    let datosGenerales = xlsx.utils.sheet_to_json(workbook.Sheets['RelacionGeneral'], { raw: true });
+    let datosAsesor = xlsx.utils.sheet_to_json(workbook.Sheets['ContactoAsesor'], { raw: true });
 
     // 🔥 Limpiar encabezados invisibles
     datosGenerales = limpiarEncabezados(datosGenerales);
@@ -46,11 +46,14 @@ function obtenerDatosClientes(ruta) {
             estado: row['ESTADO']
         }));
 
-    const asesores = datosAsesor.map(a => ({
-        asesor: a.ASESOR,
-        telefono: a.TELEFONO,
-        mensaje: a.MENSAJE
-    }));
+        const asesores = datosAsesor
+        .filter(a => a.NombreAsesor && a.Telefono) // ✅ usa los nombres reales
+        .map(a => ({
+            asesor: a.NombreAsesor.toString().trim(),
+            telefono: a.Telefono.toString().trim(),
+            mensaje: a.MensajePersonalizado ? a.MensajePersonalizado.toString().trim() : ''
+        }));
+    
 
     return { clientes: clientesRecogen, asesores };
 }

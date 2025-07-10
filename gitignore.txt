@@ -1,0 +1,13 @@
+# Ignorar node_modules
+node_modules/
+
+# Ignorar archivos temporales
+*.log
+*.tmp
+.DS_Store
+
+# Ignorar PDFs
+pdfs/
+
+# Ignorar Excel de trabajo
+ReporteWhatsapp.xlsx

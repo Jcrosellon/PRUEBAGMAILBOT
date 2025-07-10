@@ -26,7 +26,7 @@ client.on('ready', async () => {
     console.log('✅ ¡Cliente conectado a WhatsApp!');
     console.log('📂 Leyendo archivo Excel...');
 
-    const { clientes, asesores } = obtenerDatosClientes('./ReporteWhatsapp.xlsx');
+    const { clientes, asesores } = obtenerDatosClientes('./ControlFacturasVentas.xlsm');
 
     console.log(`📄 Clientes encontrados (estado RECOGEN): ${clientes.length}`);
     console.log(`🧑‍💼 Asesores encontrados: ${asesores.length}`);
@@ -37,8 +37,19 @@ client.on('ready', async () => {
         
         const telefonoFormateado = `${asesor.telefono}@c.us`;
     
-        const clientesAsesor = clientes.filter(c => c.asesor && c.asesor.toUpperCase() === asesor.asesor.toUpperCase());
-const pdfPath = await crearPDFConsolidado(asesor.asesor, clientesAsesor);
+        const clientesAsesor = clientes.filter(c => 
+            c.asesor && c.asesor.toUpperCase() === asesor.asesor.toUpperCase()
+        );
+        
+        // 🛑 Si el asesor no tiene clientes, omitir envío
+        if (clientesAsesor.length === 0) {
+            console.log(`⚠️ ${asesor.asesor} no tiene facturas asignadas. Se omite el envío.`);
+            continue; // Salta al siguiente asesor
+        }
+        
+        // ✅ Ahora sí genera el PDF y continúa con el envío
+        const pdfPath = await crearPDFConsolidado(asesor.asesor, clientesAsesor);
+        
 
     
         try {

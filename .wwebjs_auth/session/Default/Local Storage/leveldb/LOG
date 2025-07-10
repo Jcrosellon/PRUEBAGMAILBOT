@@ -1,3 +1,6 @@
-2025/04/28-16:41:20.001 93fc Reusing MANIFEST C:\Users\JoseRosellon\PruebaGmailBot\.wwebjs_auth\session\Default\Local Storage\leveldb/MANIFEST-000001
-2025/04/28-16:41:20.005 93fc Recovering log #10
-2025/04/28-16:41:20.006 93fc Reusing old log C:\Users\JoseRosellon\PruebaGmailBot\.wwebjs_auth\session\Default\Local Storage\leveldb/000010.log 
+2025/07/10-15:29:25.836 3c74 Reusing MANIFEST C:\Users\Cristian\PRUEBAGMAILBOT\.wwebjs_auth\session\Default\Local Storage\leveldb/MANIFEST-000001
+2025/07/10-15:29:25.837 3c74 Recovering log #3
+2025/07/10-15:29:25.838 3c74 Reusing old log C:\Users\Cristian\PRUEBAGMAILBOT\.wwebjs_auth\session\Default\Local Storage\leveldb/000003.log 
+2025/07/10-15:31:26.975 3c74 Level-0 table #5: started
+2025/07/10-15:31:27.060 3c74 Level-0 table #5: 18545 bytes OK
+2025/07/10-15:31:27.127 3c74 Delete type=0 #3
