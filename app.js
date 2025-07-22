@@ -37,9 +37,13 @@ client.on('ready', async () => {
         
         const telefonoFormateado = `${asesor.telefono}@c.us`;
     
-        const clientesAsesor = clientes.filter(c => 
-            c.asesor && c.asesor.toUpperCase() === asesor.asesor.toUpperCase()
+        const clientesAsesor = clientes.filter(c =>
+            c.asesor &&
+            c.estado &&
+            c.asesor.toUpperCase().trim() === asesor.asesor.toUpperCase().trim() &&
+            c.estado.toUpperCase().trim() === 'RECOGEN'
         );
+        
         
         // 🛑 Si el asesor no tiene clientes, omitir envío
         if (clientesAsesor.length === 0) {
@@ -63,7 +67,14 @@ client.on('ready', async () => {
             console.log(`🧾 Documento: ${path.basename(pdfPath)}`);
             console.log(`🧾 Facturas incluidas:`);
     
-            const clientesAsesor = clientes.filter(c => c.asesor === asesor.asesor);
+            const clientesAsesor = clientes.filter(c =>
+                c.asesor &&
+                c.estado &&
+                c.asesor.toUpperCase().trim() === asesor.asesor.toUpperCase().trim() &&
+                c.estado.toUpperCase().trim() === 'RECOGEN'
+            );
+            
+                
     
             if (clientesAsesor.length === 0) {
                 console.warn(`⚠️ No se encontraron facturas asignadas a ${asesor.asesor}`);
