@@ -24,8 +24,8 @@ function limpiarEncabezados(datos) {
 function obtenerDatosClientes(ruta) {
     const workbook = xlsx.readFile(ruta);
 
-    let datosGenerales = xlsx.utils.sheet_to_json(workbook.Sheets['DatosGenerales'], { raw: true });
-    let datosAsesor = xlsx.utils.sheet_to_json(workbook.Sheets['DatosAsesor'], { raw: true });
+    let datosGenerales = xlsx.utils.sheet_to_json(workbook.Sheets['RelacionGeneral'], { raw: true });
+    let datosAsesor = xlsx.utils.sheet_to_json(workbook.Sheets['Hoja1'], { raw: true });
 
     // 🔥 Limpiar encabezados invisibles
     datosGenerales = limpiarEncabezados(datosGenerales);

@@ -11,3 +11,5 @@ pdfs/
 
 # Ignorar Excel de trabajo
 ReporteWhatsapp.xlsx
+.wwebjs_auth/
+.wwebjs_cache/

@@ -26,7 +26,7 @@ client.on('ready', async () => {
     console.log('✅ ¡Cliente conectado a WhatsApp!');
     console.log('📂 Leyendo archivo Excel...');
 
-    const { clientes, asesores } = obtenerDatosClientes('./ReporteWhatsapp.xlsx');
+    const { clientes, asesores } = obtenerDatosClientes('./ControlFacturasVentas.xlsm');
 
     console.log(`📄 Clientes encontrados (estado RECOGEN): ${clientes.length}`);
     console.log(`🧑‍💼 Asesores encontrados: ${asesores.length}`);
