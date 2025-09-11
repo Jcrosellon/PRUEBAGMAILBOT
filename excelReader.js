@@ -46,11 +46,14 @@ function obtenerDatosClientes(ruta) {
             estado: row['ESTADO']
         }));
 
-    const asesores = datosAsesor.map(a => ({
-        asesor: a.ASESOR,
-        telefono: a.TELEFONO,
-        mensaje: a.MENSAJE
-    }));
+    const asesores = datosAsesor
+        .filter(a => a.ASESOR && a.TELEFONO)
+        .map(a => ({
+            asesor: a.ASESOR.toString().trim(),
+            telefono: a.TELEFONO.toString().trim(),
+            mensaje: a.MENSAJE ? a.MENSAJE.toString().trim() : ''
+        }));
+
 
     return { clientes: clientesRecogen, asesores };
 }

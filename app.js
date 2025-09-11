@@ -23,8 +23,9 @@ client.on('qr', qr => {
 });
 
 client.on('ready', async () => {
-    console.log('✅ ¡Cliente conectado a WhatsApp!');
-    console.log('📂 Leyendo archivo Excel...');
+    try {
+        console.log('✅ ¡Cliente conectado a WhatsApp!');
+        console.log('📂 Leyendo archivo Excel...');
 
     const { clientes, asesores } = obtenerDatosClientes('./ControlFacturasVentas.xlsm');
 
@@ -35,10 +36,29 @@ client.on('ready', async () => {
         console.log('-----------------------------------');
         console.log(`🎯 Procesando asesor: ${asesor.asesor}`);
         
-        const telefonoFormateado = `${asesor.telefono}@c.us`;
+        let telefonoFormateado = asesor.telefono.replace(/[^0-9]/g, '');
+        if (!telefonoFormateado.startsWith('57')) {
+            telefonoFormateado = `57${telefonoFormateado}`;
+        }
+        telefonoFormateado = `${telefonoFormateado}@c.us`;
     
-        const clientesAsesor = clientes.filter(c => c.asesor && c.asesor.toUpperCase() === asesor.asesor.toUpperCase());
-const pdfPath = await crearPDFConsolidado(asesor.asesor, clientesAsesor);
+        const clientesAsesor = clientes.filter(c =>
+            c.asesor &&
+            c.estado &&
+            c.asesor.toUpperCase().trim() === asesor.asesor.toUpperCase().trim() &&
+            c.estado.toUpperCase().trim() === 'RECOGEN'
+        );
+        
+        
+        // 🛑 Si el asesor no tiene clientes, omitir envío
+        if (clientesAsesor.length === 0) {
+            console.log(`⚠️ ${asesor.asesor} no tiene facturas asignadas. Se omite el envío.`);
+            continue; // Salta al siguiente asesor
+        }
+        
+        // ✅ Ahora sí genera el PDF y continúa con el envío
+        const pdfPath = await crearPDFConsolidado(asesor.asesor, clientesAsesor);
+        
 
     
         try {
@@ -52,7 +72,14 @@ const pdfPath = await crearPDFConsolidado(asesor.asesor, clientesAsesor);
             console.log(`🧾 Documento: ${path.basename(pdfPath)}`);
             console.log(`🧾 Facturas incluidas:`);
     
-            const clientesAsesor = clientes.filter(c => c.asesor === asesor.asesor);
+            const clientesAsesor = clientes.filter(c =>
+                c.asesor &&
+                c.estado &&
+                c.asesor.toUpperCase().trim() === asesor.asesor.toUpperCase().trim() &&
+                c.estado.toUpperCase().trim() === 'RECOGEN'
+            );
+            
+                
     
             if (clientesAsesor.length === 0) {
                 console.warn(`⚠️ No se encontraron facturas asignadas a ${asesor.asesor}`);
@@ -69,7 +96,8 @@ const pdfPath = await crearPDFConsolidado(asesor.asesor, clientesAsesor);
             const media = new MessageMedia('application/pdf', pdfBase64, path.basename(pdfPath));
             await client.sendMessage(telefonoFormateado, media);
     
-            const mensajePersonalizado = asesor.mensaje.replace('(Asesor)', asesor.asesor);
+            let mensajePersonalizado = asesor.mensaje || `Hola (Asesor), aquí está el reporte de facturas pendientes de firmar.`;
+            mensajePersonalizado = mensajePersonalizado.replace('(Asesor)', asesor.asesor);
             await client.sendMessage(telefonoFormateado, mensajePersonalizado);
     
             console.log(`✅ Mensaje personalizado enviado a ${asesor.asesor}: "${mensajePersonalizado}"`);
@@ -90,7 +118,18 @@ const pdfPath = await crearPDFConsolidado(asesor.asesor, clientesAsesor);
     
 
 
-    console.log('🏁 ¡Todos los mensajes y PDFs consolidados enviados!');
+        console.log('🏁 ¡Todos los mensajes y PDFs consolidados enviados!');
+    } catch (error) {
+        console.error('❌ Error global:', error);
+    }
+});
+
+client.on('auth_failure', (msg) => {
+    console.error('❌ Error de autenticación:', msg);
+});
+
+client.on('disconnected', (reason) => {
+    console.log('🔴 Cliente desconectado:', reason);
 });
 
 client.initialize();
