@@ -25,7 +25,7 @@ function obtenerDatosClientes(ruta) {
     const workbook = xlsx.readFile(ruta);
 
     let datosGenerales = xlsx.utils.sheet_to_json(workbook.Sheets['RelacionGeneral'], { raw: true });
-    let datosAsesor = xlsx.utils.sheet_to_json(workbook.Sheets['Hoja1'], { raw: true });
+    let datosAsesor = xlsx.utils.sheet_to_json(workbook.Sheets['ContactoAsesor'], { raw: true });
 
     // 🔥 Limpiar encabezados invisibles
     datosGenerales = limpiarEncabezados(datosGenerales);
@@ -46,13 +46,15 @@ function obtenerDatosClientes(ruta) {
             estado: row['ESTADO']
         }));
 
-    const asesores = datosAsesor
-        .filter(a => a.ASESOR && a.TELEFONO)
-        .map(a => ({
-            asesor: a.ASESOR.toString().trim(),
-            telefono: a.TELEFONO.toString().trim(),
-            mensaje: a.MENSAJE ? a.MENSAJE.toString().trim() : ''
-        }));
+   const asesores = datosAsesor
+    .filter(a => a.NombreAsesor && a.Telefono)
+    .map(a => ({
+        asesor: a.NombreAsesor.toString().trim(),
+        telefono: a.Telefono.toString().trim(),
+        mensaje: a.MensajePersonalizado ? a.MensajePersonalizado.toString().trim() : ''
+    }));
+
+
 
 
     return { clientes: clientesRecogen, asesores };
